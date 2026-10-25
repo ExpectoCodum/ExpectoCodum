@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { siteConfig } from "../config";
 import { localized, type Locale } from "../data/locales";
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -75,6 +76,7 @@ const navigation = [
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:locale" content={locale === "es" ? "es_UY" : locale === "en" ? "en_US" : "ru_RU"} />
     <title>{title} | {siteConfig.name}</title>
+    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#contenido">{sharedText.skip}</a>
