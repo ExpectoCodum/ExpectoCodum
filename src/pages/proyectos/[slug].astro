@@ -1,0 +1,103 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import ProjectArtwork from "../../components/ProjectArtwork.astro";
+import { projects } from "../../data/projects";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<SiteLayout
+  title={project.title}
+  description={project.summary}
+  currentPage="proyectos"
+  projectSlug={project.slug}
+>
+  <article class="project-detail-page">
+    <section class="project-detail-hero">
+      <div class="container project-detail-hero-grid">
+        <div class="project-detail-intro">
+          <a class="project-back-link" href="/proyectos/">← Todos los proyectos</a>
+          <p class="eyebrow page-kicker"><span class="eyebrow-line"></span> {project.categoryLabel}</p>
+          <h1>{project.title}</h1>
+          <p class="project-detail-lead">{project.headline}</p>
+          <p class="project-detail-summary">{project.summary}</p>
+          <div class="project-detail-tags">
+            <span>{project.status}</span>
+            <span>{project.technologiesLabel}</span>
+          </div>
+        </div>
+        <ProjectArtwork project={project} detail />
+      </div>
+    </section>
+
+    <div class="container project-detail-content">
+      <section class="project-detail-section">
+        <p class="eyebrow"><span class="eyebrow-line"></span> Propósito</p>
+        <div class="project-detail-text">
+          <h2>Una solución pensada para un reto real.</h2>
+          <p>{project.purpose}</p>
+        </div>
+      </section>
+
+      <section class="project-detail-section">
+        <p class="eyebrow"><span class="eyebrow-line"></span> Alcance y capacidades</p>
+        <div class="project-detail-text">
+          <h2>Qué hace el proyecto.</h2>
+          <ul class="project-capability-list">
+            {project.capabilities.map((capability) => <li>{capability}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section class="project-detail-section project-technology-section">
+        <p class="eyebrow"><span class="eyebrow-line"></span> Tecnologías</p>
+        <div class="project-detail-text">
+          <h2>Una base técnica alineada con el producto.</h2>
+          {project.technologies.length > 0 ? (
+            <ul class="project-technology-list">
+              {project.technologies.map((technology) => <li>{technology}</li>)}
+            </ul>
+          ) : (
+            <p>La información compartida para este caso no especifica el stack técnico; no se agregan tecnologías por suposición.</p>
+          )}
+        </div>
+      </section>
+
+      {project.images.length > 0 && (
+        <section class="project-detail-section project-gallery-section">
+          <p class="eyebrow"><span class="eyebrow-line"></span> Vistas del proyecto</p>
+          <div class="project-detail-gallery">
+            {project.images.map((image) => (
+              <figure class:list={["project-detail-shot", { "is-portrait": image.presentation === "portrait" }]}>
+                <img src={image.src} alt={image.alt} loading="lazy" />
+                <figcaption>{image.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section class="project-detail-cta">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> {project.title}</p>
+          <h2>¿Quieres conocer más sobre este proyecto?</h2>
+        </div>
+        <div class="project-detail-cta-actions">
+          {project.externalUrl && (
+            <a class="button button-primary" href={project.externalUrl} target="_blank" rel="noreferrer">
+              {project.externalLabel} <span aria-hidden="true">↗</span>
+            </a>
+          )}
+          <a class="button button-dark" href="/contacto/">Hablemos de tu proyecto <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+    </div>
+  </article>
+</SiteLayout>

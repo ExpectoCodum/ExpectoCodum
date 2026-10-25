@@ -1,0 +1,57 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+const services = [
+  { id: "web", number: "01", title: "Sitios y plataformas web", description: "Experiencias digitales rápidas, accesibles y diseñadas para explicar el valor de tu marca y convertir visitas en oportunidades.", tags: ["Diseño responsive", "SEO técnico", "Astro", "Django"] },
+  { id: "software", number: "02", title: "Software a medida", description: "Aplicaciones y herramientas que se adaptan a tus procesos, en lugar de obligar a tu equipo a cambiar su forma de trabajar.", tags: ["Aplicaciones web", "Sistemas internos", "Modernización"] },
+  { id: "integraciones", number: "03", title: "APIs e integraciones", description: "Conectamos sistemas y servicios mediante APIs claras, seguras y mantenibles para que la información fluya donde hace falta.", tags: ["REST APIs", "Node.js", "FastAPI", "Spring Boot"] },
+  { id: "automatizacion", number: "04", title: "Automatización y bots", description: "Reducimos tareas manuales con flujos automatizados, bots conversacionales e integraciones que liberan tiempo para lo importante.", tags: ["Telegram", "Procesos", "Integraciones"] },
+];
+---
+
+<SiteLayout
+  title="Soluciones"
+  description="Desarrollo web, software a medida, APIs e integraciones y automatización de procesos."
+  currentPage="soluciones"
+>
+  <section class="page-hero">
+    <div class="container page-hero-grid">
+      <div>
+        <p class="eyebrow page-kicker"><span class="eyebrow-line"></span> Soluciones digitales</p>
+        <h1>Menos fricción.<br /><span>Más posibilidades.</span></h1>
+      </div>
+      <div class="page-hero-copy">
+        <p>Combinamos ingeniería, diseño y visión de negocio para crear productos digitales útiles, mantenibles y preparados para crecer.</p>
+      </div>
+    </div>
+  </section>
+  <section class="content-section">
+    <div class="container content-split">
+      <div>
+        <p class="eyebrow"><span class="eyebrow-line"></span> Cómo podemos ayudar</p>
+        <h2>Soluciones para avanzar.</h2>
+      </div>
+      <div class="service-list">
+        {services.map((service) => (
+          <article class="service-detail" id={service.id}>
+            <span class="service-number">{service.number}</span>
+            <h3>{service.title}</h3>
+            <p>{service.description}</p>
+            <div class="tag-list">{service.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="closing-cta section-pad">
+    <div class="container closing-grid">
+      <div>
+        <p class="eyebrow"><span class="eyebrow-line"></span> Cada proyecto empieza con una conversación</p>
+        <h2>¿Cuál es tu<br />próximo reto?</h2>
+      </div>
+      <div class="closing-copy">
+        <p>Cuéntame dónde estás y qué quieres conseguir. Juntos definiremos el camino más sensato para lograrlo.</p>
+        <a class="button button-dark" href="/contacto/">Cuéntame tu idea <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

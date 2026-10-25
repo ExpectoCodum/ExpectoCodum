@@ -1,0 +1,61 @@
+---
+import type { Project } from "../data/projects";
+import type { Locale } from "../data/locales";
+
+interface Props {
+  project: Project;
+  detail?: boolean;
+  locale?: Locale;
+}
+
+const { project, detail = false, locale } = Astro.props;
+const visualKicker = locale === "en"
+  ? project.slug === "rodas-xxi" ? "MODERNIZATION · SYSTEMS" : project.slug === "servigen" ? "CONSULTING · TECHNICAL STRATEGY" : project.visualKicker
+  : locale === "ru"
+    ? project.slug === "rodas-xxi" ? "МОДЕРНИЗАЦИЯ · СИСТЕМЫ" : project.slug === "servigen" ? "КОНСАЛТИНГ · ТЕХНИЧЕСКАЯ СТРАТЕГИЯ" : project.visualKicker
+    : project.visualKicker;
+const visualTitle = locale === "en" && project.slug === "rodas-xxi"
+  ? "Rodas XXI ERP"
+  : locale === "en" && project.slug === "servigen"
+    ? "Financial management systems"
+    : locale === "ru" && project.slug === "rodas-xxi"
+      ? "ERP Rodas XXI"
+      : locale === "ru" && project.slug === "servigen"
+        ? "Системы финансового управления"
+        : project.visualTitle;
+const processLabels = locale === "en"
+  ? ["Sales", "Commercial", "Invoicing"]
+  : locale === "ru"
+    ? ["Продажи", "Коммерция", "Счета"]
+    : ["Ventas", "Comercial", "Facturación"];
+const artworkImages: Record<string, string> = {
+  breedflow: "/images/breedflow-header.webp",
+  espanoldiariobot: "/images/espanoldiariobot-chat.png",
+  "miami-torrejas": "/images/miami-torrejas-logo.webp",
+  "tach-dream": "/images/kennel-tach-dream-card.webp",
+};
+const image = artworkImages[project.slug];
+---
+
+<div
+  class:list={["project-art", `project-art-${project.slug}`, { "project-art-detail": detail }]}
+  role="img"
+  aria-label={`${project.title}: ${project.categoryLabel}`}
+>
+  {image ? (
+    <img src={image} alt="" loading={detail ? "eager" : "lazy"} />
+  ) : (
+    <div class="project-art-placeholder" aria-hidden="true">
+      <span class="project-art-kicker">{visualKicker}</span>
+      <strong>{visualTitle}</strong>
+      {project.slug === "rodas-xxi" && (
+        <div class="project-art-metrics">
+          {processLabels.map((label) => <span>{label}</span>)}
+        </div>
+      )}
+      {project.slug === "servigen" && <span class="consulting-mark">SG</span>}
+    </div>
+  )}
+  <span class="project-art-shade" aria-hidden="true"></span>
+  <span class="project-art-label">{project.categoryLabel}</span>
+</div>

@@ -1,0 +1,35 @@
+---
+import LocalizedPage from "../../components/LocalizedPage.astro";
+import { projects } from "../../data/projects";
+import type { Locale } from "../../data/locales";
+
+export function getStaticPaths() {
+  const languages: Locale[] = ["en", "ru"];
+  const projectSlugs = projects.map((project) => project.slug);
+  const paths = [
+    { path: undefined, page: "home" },
+    { path: "solutions", page: "solutions" },
+    { path: "projects", page: "projects" },
+    { path: "about", page: "about" },
+    { path: "contact", page: "contact" },
+  ];
+  return languages.flatMap((lang) => [
+    ...paths.map(({ path, page }) => ({
+      params: { lang, path },
+      props: { locale: lang, page },
+    })),
+    ...projectSlugs.map((slug) => ({
+      params: { lang, path: `projects/${slug}` },
+      props: { locale: lang, page: "detail", slug },
+    })),
+  ]);
+}
+
+const { locale, page, slug } = Astro.props as {
+  locale: Locale;
+  page: "home" | "solutions" | "projects" | "about" | "contact" | "detail";
+  slug?: string;
+};
+---
+
+<LocalizedPage locale={locale} page={page} slug={slug} />

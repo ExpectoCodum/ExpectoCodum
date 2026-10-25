@@ -1,0 +1,198 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  title="Inicio"
+  description="Expecto Codum diseña y desarrolla sitios web, plataformas, APIs y automatizaciones a medida."
+  currentPage="inicio"
+>
+  <section class="hero">
+    <div class="container hero-layout">
+      <div class="hero-copy">
+        <p class="hero-badge"><span aria-hidden="true">⚡</span> Ingeniería de Software a Medida</p>
+        <h1>Software que <span>hace avanzar.</span></h1>
+        <p class="hero-description">
+          Diseñamos y desarrollamos software útil, claro y preparado para resolver los retos reales de tu negocio.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="/contacto/">Cuéntanos tu proyecto <span aria-hidden="true">↗</span></a>
+          <a class="button button-outline-light" href="/proyectos/">Ver proyectos <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="hero-mark">
+          <img src="/images/expecto-codum-mark.webp" alt="Logo multicolor de Expecto Codum" width="830" height="851" fetchpriority="high" />
+          <span class="hero-spark hero-spark-orange" aria-hidden="true"></span>
+          <span class="hero-spark hero-spark-cyan" aria-hidden="true"></span>
+          <span class="hero-spark hero-spark-magenta" aria-hidden="true"></span>
+          <span class="hero-spark hero-spark-yellow" aria-hidden="true"></span>
+        </div>
+        <p class="art-caption"><span>Creatividad</span> y tecnología, en equilibrio.</p>
+      </div>
+    </div>
+    <nav class="hero-specialties container" aria-label="Especialidades">
+      <a href="/soluciones/#web">WEB APPS</a>
+      <a href="/soluciones/#software">MOBILE APPS</a>
+      <a href="/soluciones/#integraciones">CUSTOM APIS</a>
+      <a href="/soluciones/#automatizacion">BOTS TELEGRAM/WHATSAPP</a>
+      <a href="/soluciones/#web">E-COMMERCE PLATFORMS</a>
+    </nav>
+  </section>
+
+  <section class="intro-section section-pad" id="soluciones">
+    <div class="container intro-grid">
+      <div>
+        <p class="eyebrow"><span class="eyebrow-line"></span> Qué hacemos</p>
+        <h2>La tecnología correcta<br />para el siguiente paso.</h2>
+      </div>
+      <div class="intro-copy">
+        <p class="lead">No se trata de usar más tecnología. Se trata de construir la que tu negocio realmente necesita.</p>
+        <a class="text-link" href="/soluciones/">Conoce nuestras soluciones <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <div class="container service-strip">
+      <a href="/soluciones/#web">
+        <span class="service-number">01</span>
+        <strong>Sitios y plataformas web</strong>
+        <span class="service-description">Experiencias digitales claras, rápidas y listas para crecer con tu negocio.</span>
+        <span class="service-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a href="/soluciones/#software">
+        <span class="service-number">02</span>
+        <strong>Software a medida</strong>
+        <span class="service-description">Herramientas diseñadas en torno a tus procesos y necesidades reales.</span>
+        <span class="service-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a href="/soluciones/#integraciones">
+        <span class="service-number">03</span>
+        <strong>APIs e integraciones</strong>
+        <span class="service-description">Conectamos tus sistemas para que los datos fluyan de forma confiable.</span>
+        <span class="service-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a href="/soluciones/#automatizacion">
+        <span class="service-number">04</span>
+        <strong>Automatización</strong>
+        <span class="service-description">Bots y flujos inteligentes que reducen tareas repetitivas.</span>
+        <span class="service-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="featured-section section-pad">
+    <div class="container section-heading">
+      <div>
+        <p class="eyebrow"><span class="eyebrow-line"></span> Trabajo seleccionado</p>
+        <h2>Proyectos con propósito.</h2>
+      </div>
+      <a class="text-link" href="/proyectos/">Ver todos los proyectos <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="container home-carousel" data-project-carousel role="region" aria-roledescription="carrusel" aria-label="Proyectos destacados">
+      <div class="home-carousel-viewport" data-carousel-viewport aria-label="Desliza para explorar los proyectos" tabindex="0">
+        <div class="home-projects" data-carousel-track>
+      <article class="project-card" aria-label="EspañolDiarioBot">
+        <a class="project-visual bot-visual" href="/proyectos/espanoldiariobot/" aria-label="Ver EspañolDiarioBot">
+          <img class="bot-chat-image" src="/images/espanoldiariobot-chat-card.webp" alt="Conversación real con ejercicios, explicaciones y botones de EspañolDiarioBot en Telegram" loading="lazy" />
+          <img class="bot-profile-image" src="/images/espanoldiariobot-profile.webp" alt="" loading="lazy" />
+          <span class="visual-title">EspañolDiarioBot</span>
+          <span class="visual-index">01</span>
+        </a>
+        <div class="project-meta"><span>En producción · @SpanishDailyBot</span><span>Python · aiogram 3</span></div>
+        <h3>Práctica de español ágil, interactiva y personal.</h3>
+        <a class="card-link" href="/proyectos/espanoldiariobot/">Conocer el proyecto <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="project-card" aria-label="BreedFlow">
+        <a class="project-visual breedflow-visual" href="/proyectos/breedflow/" aria-label="Ver BreedFlow">
+          <span class="visual-kicker">SAAS · GESTIÓN CINOLÓGICA</span>
+          <span class="visual-title">BreedFlow · Plataforma cinológica</span>
+          <span class="visual-index">02</span>
+        </a>
+        <div class="project-meta"><span>Producto SaaS</span><span>Django · Angular · PostgreSQL</span></div>
+        <h3>Datos genéticos complejos, decisiones más claras.</h3>
+        <a class="card-link" href="/proyectos/breedflow/">Conocer el proyecto <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="project-card" aria-label="Miami Torrejas">
+        <a class="project-visual miami-visual" href="/proyectos/miami-torrejas/" aria-label="Ver el proyecto web de Miami Torrejas">
+          <span class="visual-kicker">SITIO WEB · GASTRONOMÍA</span>
+          <div class="miami-preview">
+            <span class="miami-brand">El Sabor de la Abuela</span>
+            <strong>MIAMI<br />TORREJAS</strong>
+            <span class="miami-tagline">El verdadero sabor cubano, con almíbar artesanal y canela en rama.</span>
+            <span class="miami-actions"><span>Ver bandejas</span><span>Calculadora de eventos</span></span>
+            <span class="miami-services"><span>DELIVERY</span><span>PICK-UP</span><span>CATERING</span></span>
+          </div>
+          <span class="visual-index">03</span>
+        </a>
+        <div class="project-meta"><span>Miami Torrejas · Sitio web</span><span>Diseño · Catálogo · Cotización</span></div>
+        <h3>Un sabor artesanal convertido en experiencia digital.</h3>
+        <a class="card-link" href="/proyectos/miami-torrejas/">Conocer el proyecto <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="project-card" aria-label="Kennel Tach Dream">
+        <a class="project-visual kennel-visual" href="/proyectos/tach-dream/" aria-label="Ver Kennel Tach Dream">
+          <span class="visual-kicker">KENNEL TACH DREAM · SITIO WEB</span>
+          <span class="kennel-card-caption">Sitio web · English Cocker Spaniel</span>
+          <span class="visual-index">04</span>
+        </a>
+        <div class="project-meta"><span>Web corporativa</span><span>Django · Diseño web</span></div>
+        <h3>Una presencia digital para una pasión familiar.</h3>
+        <a class="card-link" href="/proyectos/tach-dream/">Conocer el proyecto <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="project-card" aria-label="Modernización ERP Rodas XXI">
+        <a class="project-visual erp-visual" href="/proyectos/rodas-xxi/" aria-label="Ver modernización de Rodas XXI">
+          <span class="visual-kicker">MODERNIZACIÓN · SISTEMAS</span>
+          <div class="erp-dash">
+            <span>Operaciones<strong>+ claridad</strong></span>
+            <span>Arquitectura<strong>Modular</strong></span>
+            <span>Integración<strong>PostgreSQL</strong></span>
+            <span>Evolución<strong>Continua</strong></span>
+          </div>
+          <span class="visual-title">Modernización ERP</span>
+          <span class="visual-index">05</span>
+        </a>
+        <div class="project-meta"><span>Citmatel · ERP Rodas XXI</span><span>SQL Server · PostgreSQL</span></div>
+        <h3>Modernización de un ERP con más de 20 años de historia.</h3>
+        <a class="card-link" href="/proyectos/rodas-xxi/">Conocer el proyecto <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="project-card" aria-label="Consultoría para Servigen">
+        <a class="project-visual consulting-visual" href="/proyectos/servigen/" aria-label="Ver consultoría para Servigen">
+          <span class="visual-kicker">CONSULTORÍA · ESTRATEGIA TÉCNICA</span>
+          <span class="consulting-mark">SG</span>
+          <span class="visual-title">Sistemas de gestión financiera</span>
+          <span class="visual-index">06</span>
+        </a>
+        <div class="project-meta"><span>Servigen · Asesoría técnica</span><span>Análisis · Planificación</span></div>
+        <h3>Decisiones tecnológicas con foco operativo.</h3>
+        <a class="card-link" href="/proyectos/servigen/">Conocer el proyecto <span aria-hidden="true">→</span></a>
+      </article>
+        </div>
+      </div>
+      <div class="carousel-controls" aria-label="Controles del carrusel">
+        <button class="carousel-button" type="button" data-carousel-previous aria-label="Ver proyectos anteriores">←</button>
+        <span class="carousel-position" data-carousel-position aria-live="polite">01 / 06</span>
+        <button class="carousel-button" type="button" data-carousel-next aria-label="Ver proyectos siguientes">→</button>
+        <button class="carousel-button carousel-pause" type="button" data-carousel-toggle aria-pressed="false">Pausar</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="statement-section">
+    <div class="container statement-content">
+      <p class="eyebrow"><span class="eyebrow-line"></span> Nuestra manera de trabajar</p>
+      <blockquote>Tecnología bien pensada.<br />Resultados que se notan.</blockquote>
+      <a class="text-link" href="/acerca-de/">Conoce Expecto Codum <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <section class="closing-cta section-pad">
+    <div class="container closing-grid">
+      <div>
+        <p class="eyebrow"><span class="eyebrow-line"></span> El siguiente paso empieza aquí</p>
+        <h2>¿Tienes una idea<br />que merece existir?</h2>
+      </div>
+      <div class="closing-copy">
+        <p>Cuéntanos qué quieres lograr. Convirtamos el reto en una solución digital clara, útil y preparada para crecer.</p>
+        <a class="button button-dark" href="/contacto/">Iniciar una conversación <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

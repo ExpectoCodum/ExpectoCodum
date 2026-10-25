@@ -1,0 +1,233 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import ProjectArtwork from "./ProjectArtwork.astro";
+import { localized, projectCopy, type Locale } from "../data/locales";
+import { projects } from "../data/projects";
+import { siteConfig } from "../config";
+
+interface Props {
+  locale: Locale;
+  page: "home" | "solutions" | "projects" | "about" | "contact" | "detail";
+  slug?: string;
+}
+
+const { locale, page, slug } = Astro.props;
+const t = localized[locale];
+const prefix = `/${locale}`;
+const copy = page === "detail" && slug ? projectCopy[locale][slug] : undefined;
+const project = slug ? projects.find((item) => item.slug === slug) : undefined;
+const displayProject = project && copy ? { ...project, ...copy } : project;
+const localizedTitles: Record<string, string> = {
+  espanoldiariobot: "EspañolDiarioBot",
+  breedflow: "BreedFlow",
+  "miami-torrejas": "Miami Torrejas",
+  "tach-dream": "Kennel Tach Dream",
+  "rodas-xxi": locale === "en" ? "Rodas XXI ERP Modernization" : "Модернизация ERP Rodas XXI",
+  servigen: locale === "en" ? "Servigen Consulting" : "Консалтинг для Servigen",
+};
+const localizedImageAlts: Record<string, string[]> = locale === "en" ? {
+  breedflow: ["BreedFlow screen with tools for canine clubs and federations"],
+  espanoldiariobot: ["A real Telegram conversation with exercises, explanations, and interactive buttons", "EspañolDiarioBot's Telegram profile with its description and referral program"],
+  "tach-dream": ["Kennel Tach Dream website homepage", "Kennel Tach Dream identity graphic on a warm background"],
+} : {
+  breedflow: ["Экран BreedFlow с инструментами для кинологических клубов и федераций"],
+  espanoldiariobot: ["Реальный диалог с упражнениями, объяснениями и кнопками EspañolDiarioBot в Telegram", "Профиль EspañolDiarioBot в Telegram с описанием и реферальной программой"],
+  "tach-dream": ["Главная страница сайта Kennel Tach Dream", "Фирменный знак Kennel Tach Dream на тёплом фоне"],
+};
+const translatedImages = (projectKey: string, images: typeof projects[number]["images"]) =>
+  images.map((image, index) => ({ ...image, alt: localizedImageAlts[projectKey]?.[index] ?? image.alt }));
+const displayTitle = (projectKey: string, fallback: string) => localizedTitles[projectKey] ?? fallback;
+if (displayProject) {
+  displayProject.title = displayTitle(displayProject.slug, displayProject.title);
+  displayProject.images = translatedImages(displayProject.slug, displayProject.images);
+}
+const projectTitles = localizedTitles;
+const featuredProjects = ["espanoldiariobot", "breedflow", "miami-torrejas", "tach-dream", "rodas-xxi", "servigen"]
+  .map((featuredSlug) => projects.find((item) => item.slug === featuredSlug))
+  .filter((item): item is (typeof projects)[number] => Boolean(item));
+const title = page === "home" ? t.home.title
+  : page === "solutions" ? t.solutions.title
+  : page === "projects" ? t.projects.title
+  : page === "about" ? t.about.title
+  : page === "contact" ? t.contact.title
+  : (slug ? localizedTitles[slug] : undefined) ?? displayProject?.title ?? t.projects.title;
+const description = page === "home" ? t.home.description
+  : page === "solutions" ? t.solutions.description
+  : page === "projects" ? t.projects.description
+  : page === "about" ? t.about.description
+  : page === "contact" ? t.contact.description
+  : copy?.summary ?? "";
+const currentPage = page === "home" ? "inicio"
+  : page === "solutions" ? "soluciones"
+  : page === "projects" || page === "detail" ? "proyectos"
+  : page === "about" ? "acerca"
+  : "contacto";
+const homeDescriptions = [t.home.bot, t.home.breedflow, t.home.miami, t.home.kennel, t.home.rodas, t.home.servigen];
+---
+
+<SiteLayout
+  title={title}
+  description={description}
+  currentPage={currentPage}
+  locale={locale}
+  projectSlug={slug}
+>
+  {page === "home" && (
+    <>
+      <section class="hero">
+        <div class="container hero-layout">
+          <div class="hero-copy">
+            <p class="hero-badge"><span aria-hidden="true">⚡</span> {t.home.badge}</p>
+            <h1>{t.home.headline}</h1>
+            <p class="hero-description">{t.home.descriptionText}</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href={`${prefix}/contact/`}>{t.home.cta} <span aria-hidden="true">↗</span></a>
+              <a class="button button-outline-light" href={`${prefix}/projects/`}>{t.home.viewProjects} <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+          <div class="hero-art">
+            <div class="hero-mark">
+              <img src="/images/expecto-codum-mark.webp" alt={locale === "en" ? "Expecto Codum multicolor logo" : "Многоцветный логотип Expecto Codum"} width="830" height="851" fetchpriority="high" />
+              <span class="hero-spark hero-spark-orange" aria-hidden="true"></span>
+              <span class="hero-spark hero-spark-cyan" aria-hidden="true"></span>
+              <span class="hero-spark hero-spark-magenta" aria-hidden="true"></span>
+              <span class="hero-spark hero-spark-yellow" aria-hidden="true"></span>
+            </div>
+            <p class="art-caption">{t.home.artCaption}</p>
+          </div>
+        </div>
+        <nav class="hero-specialties container" aria-label={locale === "en" ? "Specialties" : "Направления"}>
+          {t.home.specialties.map((specialty, index) => <a href={`${prefix}/solutions/#${["web", "software", "integraciones", "automatizacion", "web"][index]}`}>{specialty}</a>)}
+        </nav>
+      </section>
+      <section class="intro-section section-pad" id="solutions">
+        <div class="container intro-grid">
+          <div><p class="eyebrow"><span class="eyebrow-line"></span> {t.home.what}</p><h2 set:html={t.home.intro}></h2></div>
+          <div class="intro-copy"><p class="lead">{t.home.lead}</p><a class="text-link" href={`${prefix}/solutions/`}>{t.home.learnSolutions} <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="container service-strip">
+          {t.home.services.map(([service, detail], index) => (
+            <a href={`${prefix}/solutions/#${["web", "software", "integraciones", "automatizacion"][index]}`}>
+              <span class="service-number">0{index + 1}</span><strong>{service}</strong><span class="service-description">{detail}</span><span class="service-arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+      <section class="featured-section section-pad">
+        <div class="container section-heading">
+          <div><p class="eyebrow"><span class="eyebrow-line"></span> {t.home.work}</p><h2>{t.home.projectsTitle}</h2></div>
+          <a class="text-link" href={`${prefix}/projects/`}>{t.home.allProjects} <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="container home-carousel" data-project-carousel role="region" aria-roledescription="carousel" aria-label={t.home.projectsTitle}>
+          <div class="home-carousel-viewport" data-carousel-viewport aria-label={locale === "en" ? "Swipe to explore projects" : "Листайте проекты"} tabindex="0">
+            <div class="home-projects" data-carousel-track>
+              {featuredProjects.map((item, index) => {
+                const localizedProject = projectCopy[locale][item.slug];
+                const href = `${prefix}/projects/${item.slug}/`;
+                return (
+                  <article class="project-card" aria-label={projectTitles[item.slug]}>
+                    <a class:list={["project-visual", item.visualClass]} href={href} aria-label={`${locale === "en" ? "View" : "Открыть"} ${projectTitles[item.slug]}`}>
+                      {item.slug === "espanoldiariobot" && <><img class="bot-chat-image" src="/images/espanoldiariobot-chat-card.webp" alt="" loading="lazy" /><img class="bot-profile-image" src="/images/espanoldiariobot-profile.webp" alt="" loading="lazy" /></>}
+                      {item.slug === "miami-torrejas" ? (
+                        <div class="miami-preview"><span class="miami-brand">El Sabor de la Abuela</span><strong>MIAMI<br />TORREJAS</strong><span class="miami-tagline">{locale === "en" ? "The real Cuban flavor, with handmade syrup and cinnamon." : "Настоящий кубинский вкус, домашний сироп и корица."}</span><span class="miami-actions"><span>{locale === "en" ? "View trays" : "Подносы"}</span><span>{locale === "en" ? "Event calculator" : "Расчёт мероприятия"}</span></span><span class="miami-services"><span>DELIVERY</span><span>PICK-UP</span><span>CATERING</span></span></div>
+                      ) : item.slug === "rodas-xxi" ? (
+                        <><span class="visual-kicker">{locale === "en" ? "MODERNIZATION · SYSTEMS" : "МОДЕРНИЗАЦИЯ · СИСТЕМЫ"}</span><div class="erp-dash"><span>{locale === "en" ? "Operations" : "Операции"}<strong>{locale === "en" ? "Clearer" : "Ясность"}</strong></span><span>{locale === "en" ? "Architecture" : "Архитектура"}<strong>{locale === "en" ? "Modular" : "Модульная"}</strong></span><span>{locale === "en" ? "Database" : "База данных"}<strong>PostgreSQL</strong></span><span>{locale === "en" ? "Evolution" : "Развитие"}<strong>{locale === "en" ? "Ongoing" : "Постоянное"}</strong></span></div><span class="visual-title">Rodas XXI ERP</span></>
+                      ) : item.slug === "servigen" ? (
+                        <><span class="visual-kicker">{locale === "en" ? "CONSULTING · TECH STRATEGY" : "КОНСАЛТИНГ · СТРАТЕГИЯ"}</span><span class="consulting-mark">SG</span><span class="visual-title">{locale === "en" ? "Financial management systems" : "Финансовые системы"}</span></>
+                      ) : item.slug === "breedflow" ? (
+                        <><span class="visual-kicker">SAAS · {locale === "en" ? "CANINE MANAGEMENT" : "КИНОЛОГИЯ"}</span><span class="visual-title">BreedFlow · {locale === "en" ? "Canine platform" : "Кинологическая платформа"}</span></>
+                      ) : item.slug === "tach-dream" ? (
+                        <><span class="visual-kicker">KENNEL TACH DREAM · {locale === "en" ? "WEBSITE" : "САЙТ"}</span><span class="kennel-card-caption">{locale === "en" ? "Website · English Cocker Spaniel" : "Сайт · Английский кокер-спаниель"}</span></>
+                      ) : (
+                        <><span class="visual-title">EspañolDiarioBot</span></>
+                      )}
+                      <span class="visual-index">{String(index + 1).padStart(2, "0")}</span>
+                    </a>
+                    <div class="project-meta"><span>{localizedProject.status}</span><span>{localizedProject.technologiesLabel}</span></div>
+                    <h3>{homeDescriptions[index]}</h3>
+                    <a class="card-link" href={href}>{t.home.learnProject} <span aria-hidden="true">→</span></a>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+          <div class="carousel-controls" aria-label={locale === "en" ? "Carousel controls" : "Управление каруселью"}>
+            <button class="carousel-button" type="button" data-carousel-previous aria-label={locale === "en" ? "Previous projects" : "Предыдущие проекты"}>←</button>
+            <span class="carousel-position" data-carousel-position aria-live="polite">01 / 06</span>
+            <button class="carousel-button" type="button" data-carousel-next aria-label={locale === "en" ? "Next projects" : "Следующие проекты"}>→</button>
+            <button
+              class="carousel-button carousel-pause"
+              type="button"
+              data-carousel-toggle
+              data-pause-label={t.home.pause}
+              data-resume-label={t.home.resume}
+              data-reduced-label={locale === "en" ? "Reduced motion" : "Уменьшение движения"}
+              aria-pressed="false"
+            >{t.home.pause}</button>
+          </div>
+        </div>
+      </section>
+      <section class="statement-section"><div class="container statement-content"><p class="eyebrow"><span class="eyebrow-line"></span> {t.home.statementEyebrow}</p><blockquote set:html={t.home.statement}></blockquote><a class="text-link" href={`${prefix}/about/`}>{t.home.aboutLink} <span aria-hidden="true">↗</span></a></div></section>
+      <section class="closing-cta section-pad"><div class="container closing-grid"><div><p class="eyebrow"><span class="eyebrow-line"></span> {t.home.next}</p><h2 set:html={t.home.question}></h2></div><div class="closing-copy"><p>{t.home.close}</p><a class="button button-dark" href={`${prefix}/contact/`}>{t.home.start} <span aria-hidden="true">↗</span></a></div></div></section>
+    </>
+  )}
+
+  {page === "solutions" && (
+    <>
+      <section class="page-hero"><div class="container page-hero-grid"><div><p class="eyebrow page-kicker"><span class="eyebrow-line"></span> {t.solutions.kicker}</p><h1 set:html={t.solutions.headline}></h1></div><div class="page-hero-copy"><p>{t.solutions.lead}</p></div></div></section>
+      <section class="content-section"><div class="container content-split"><div><p class="eyebrow"><span class="eyebrow-line"></span> {t.solutions.eyebrow}</p><h2>{t.solutions.heading}</h2></div><div class="service-list">{t.solutions.services.map(([name, detail, tags], index) => <article class="service-detail" id={["web", "software", "integraciones", "automatizacion"][index]}><span class="service-number">0{index + 1}</span><h3>{name}</h3><p>{detail}</p><div class="tag-list">{tags.map((tag) => <span class="tag">{tag}</span>)}</div></article>)}</div></div></section>
+      <section class="closing-cta section-pad"><div class="container closing-grid"><div><p class="eyebrow"><span class="eyebrow-line"></span> {t.solutions.ctaEyebrow}</p><h2 set:html={t.solutions.ctaTitle}></h2></div><div class="closing-copy"><p>{t.solutions.ctaText}</p><a class="button button-dark" href={`${prefix}/contact/`}>{t.solutions.ctaButton} <span aria-hidden="true">↗</span></a></div></div></section>
+    </>
+  )}
+
+  {page === "projects" && (
+    <>
+      <section class="page-hero projects-hero"><div class="container page-hero-grid"><div><p class="eyebrow page-kicker"><span class="eyebrow-line"></span> {t.projects.kicker}</p><h1 set:html={t.projects.headline}></h1></div><div class="page-hero-copy"><p>{t.projects.lead}</p></div></div></section>
+      <section class="content-section projects-list-section"><div class="container">
+        <div class="project-toolbar"><p>{t.projects.toolbar}</p><div class="filter-list" role="group" aria-label={locale === "en" ? "Filter projects" : "Фильтр проектов"}>{t.projects.filters.map((filter, index) => <button class="filter-button" type="button" data-filter={["todos", "producto", "web", "consultoria"][index]} aria-pressed={index === 0}>{filter}</button>)}</div></div>
+        <div class="projects-list">{projects.map((item, index) => { const c = projectCopy[locale][item.slug]; const href = `${prefix}/projects/${item.slug}/`; return <article class="project-row" data-category={item.category}><a class="project-row-artwork" href={href} aria-label={`${t.projects.case}: ${item.title}`}><ProjectArtwork project={{ ...item, ...c }} locale={locale} /></a><div class="project-row-copy"><div class="project-row-meta"><span>{c.categoryLabel}</span><span>{c.status}</span></div><h2>{displayTitle(item.slug, item.title)}</h2><p class="project-row-headline">{c.headline}</p><p class="project-row-summary">{c.summary}</p><p class="project-row-stack">{c.technologiesLabel}</p><a class="card-link" href={href}>{t.projects.case} <span aria-hidden="true">↗</span></a></div><span class="project-row-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span></article>; })}</div>
+      </div></section>
+    </>
+  )}
+
+  {page === "detail" && displayProject && copy && (
+    <article class="project-detail-page">
+      <section class="project-detail-hero"><div class="container project-detail-hero-grid">
+        <div class="project-detail-intro"><a class="project-back-link" href={`${prefix}/projects/`}>{t.detail.back}</a><p class="eyebrow page-kicker"><span class="eyebrow-line"></span> {copy.categoryLabel}</p><h1>{displayProject.title}</h1><p class="project-detail-lead">{copy.headline}</p><p class="project-detail-summary">{copy.summary}</p><div class="project-detail-tags"><span>{copy.status}</span><span>{copy.technologiesLabel}</span></div></div>
+        <ProjectArtwork project={displayProject} detail locale={locale} />
+      </div></section>
+      <div class="container project-detail-content">
+        <section class="project-detail-section"><p class="eyebrow"><span class="eyebrow-line"></span> {t.detail.purpose}</p><div class="project-detail-text"><h2>{t.detail.purposeTitle}</h2><p>{copy.purpose}</p></div></section>
+        <section class="project-detail-section"><p class="eyebrow"><span class="eyebrow-line"></span> {t.detail.capabilities}</p><div class="project-detail-text"><h2>{t.detail.capabilitiesTitle}</h2><ul class="project-capability-list">{copy.capabilities.map((capability) => <li>{capability}</li>)}</ul></div></section>
+        <section class="project-detail-section project-technology-section"><p class="eyebrow"><span class="eyebrow-line"></span> {t.detail.technologies}</p><div class="project-detail-text"><h2>{t.detail.technologiesTitle}</h2>{copy.technologies.length ? <ul class="project-technology-list">{copy.technologies.map((technology) => <li>{technology}</li>)}</ul> : <p>{t.detail.unknownTech}</p>}</div></section>
+        {displayProject.images.length > 0 && <section class="project-detail-section project-gallery-section"><p class="eyebrow"><span class="eyebrow-line"></span> {t.detail.gallery}</p><div class="project-detail-gallery">{displayProject.images.map((image, index) => <figure class:list={["project-detail-shot", { "is-portrait": image.presentation === "portrait" }]}><img src={image.src} alt={image.alt} loading="lazy" /><figcaption>{copy.imageCaptions[index] ?? image.caption}</figcaption></figure>)}</div></section>}
+        <section class="project-detail-cta"><div><p class="eyebrow"><span class="eyebrow-line"></span> {displayProject.title}</p><h2>{t.detail.ctaTitle}</h2></div><div class="project-detail-cta-actions">{displayProject.externalUrl && <a class="button button-primary" href={displayProject.externalUrl} target="_blank" rel="noreferrer">{locale === "en" ? ({ "espanoldiariobot": "Open EspañolDiarioBot on Telegram", "miami-torrejas": "Visit miamitorrejas.com", "tach-dream": "Visit Kennel Tach Dream" }[displayProject.slug] ?? displayProject.externalLabel) : ({ "espanoldiariobot": "Открыть EspañolDiarioBot в Telegram", "miami-torrejas": "Перейти на miamitorrejas.com", "tach-dream": "Открыть Kennel Tach Dream" }[displayProject.slug] ?? displayProject.externalLabel)} <span aria-hidden="true">↗</span></a>}<a class="button button-dark" href={`${prefix}/contact/`}>{t.detail.contact} <span aria-hidden="true">↗</span></a></div></section>
+      </div>
+    </article>
+  )}
+
+  {page === "about" && (
+    <>
+      <section class="page-hero"><div class="container page-hero-grid"><div><p class="eyebrow page-kicker"><span class="eyebrow-line"></span> {t.about.kicker}</p><h1 set:html={t.about.headline}></h1></div><div class="page-hero-copy"><p>{t.about.lead}</p></div></div></section>
+      <section class="about-intro"><div class="container about-grid"><div class="portrait-placeholder"><img src="/images/rikardo-perez.webp" alt={locale === "en" ? "Rikardo Pérez, founder of Expecto Codum" : "Рикардо Перес, основатель Expecto Codum"} fetchpriority="high" /><div class="portrait-caption"><span>{t.about.founder}</span><span>01 / 04</span></div></div><div class="about-copy"><p class="eyebrow"><span class="eyebrow-line"></span> {t.about.hello}</p><h2>{t.about.heading}</h2><p set:html={t.about.p1}></p><p>{t.about.p2}</p><a class="text-link" href={`${prefix}/contact/`}>{t.about.workTogether} <span aria-hidden="true">↗</span></a></div></div></section>
+      <section class="content-section"><div class="container"><p class="eyebrow"><span class="eyebrow-line"></span> {t.about.experience}</p><div class="timeline">{t.about.timeline.map(([date, position, details]) => <article class="timeline-item"><span class="timeline-date">{date}</span><div><h3>{position}</h3><p>{details}</p></div></article>)}</div></div></section>
+      <section class="content-section"><div class="container"><div class="content-split"><div><p class="eyebrow"><span class="eyebrow-line"></span> {t.about.tools}</p><h2>{t.about.techTitle}</h2></div><div class="skill-columns">{t.about.skills.map(([name, details]) => <article class="skill-column"><h3>{name}</h3><p>{details}</p></article>)}</div></div></div></section>
+      <section class="content-section"><div class="container content-split"><div><p class="eyebrow"><span class="eyebrow-line"></span> {t.about.collaborations}</p><h2>{t.about.trust}</h2></div><div><p class="content-copy">{t.about.collabText}</p><div class="client-list" aria-label={t.about.collaborations}><span class="client-name">Citmatel</span><span class="client-name">BreedFlow</span><span class="client-name">Expecto Lingua</span><span class="client-name">Kennel Tach Dream</span><span class="client-name">Servigen</span></div></div></div></section>
+      <section class="closing-cta section-pad"><div class="container closing-grid"><div><p class="eyebrow"><span class="eyebrow-line"></span> {t.about.letsTalk}</p><h2 set:html={t.about.ctaTitle}></h2></div><div class="closing-copy"><p>{t.about.ctaText}</p><a class="button button-dark" href={`${prefix}/contact/`}>{t.about.ctaButton} <span aria-hidden="true">↗</span></a></div></div></section>
+    </>
+  )}
+
+  {page === "contact" && (
+    <>
+      <section class="page-hero"><div class="container page-hero-grid"><div><p class="eyebrow page-kicker"><span class="eyebrow-line"></span> {t.contact.kicker}</p><h1 set:html={t.contact.headline}></h1></div><div class="page-hero-copy"><p>{t.contact.lead}</p></div></div></section>
+      <section class="content-section"><div class="container contact-grid"><div class="contact-info"><p class="eyebrow"><span class="eyebrow-line"></span> {t.contact.eyebrow}</p><h2>{t.contact.heading}</h2><p>{t.contact.intro}</p><div class="contact-aside"><small>{t.contact.email}</small><a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail} <span aria-hidden="true">↗</span></a><p class="form-note">{t.contact.mailNote}</p></div><div class="contact-channels" aria-label={t.contact.channels}><a class="channel-link" href={siteConfig.whatsappUrl} target="_blank" rel="noreferrer">WhatsApp · +598 91 355 256 ↗</a><a class="channel-link" href={siteConfig.telegramUrl} target="_blank" rel="noreferrer">Telegram · @ExpectoC ↗</a></div></div>
+        <div><form class="contact-form" data-contact-form data-contact-email={siteConfig.contactEmail} data-form-missing={t.contact.form[9]} data-form-sent={t.contact.form[8]} data-form-unspecified={locale === "en" ? "Not specified" : "Не указано"} data-form-subject={locale === "en" ? "New inquiry from" : "Новый запрос от"} data-form-name-label={t.contact.form[0]} data-form-email-label={t.contact.form[1]} data-form-service-label={t.contact.form[2]}>
+          <div class="form-row"><div class="form-field"><label for="name">{t.contact.form[0]}</label><input id="name" name="name" autocomplete="name" required /></div><div class="form-field"><label for="email">{t.contact.form[1]}</label><input id="email" name="email" type="email" autocomplete="email" required /></div></div>
+          <div class="form-field"><label for="service">{t.contact.form[2]}</label><input id="service" name="service" placeholder={t.contact.form[3]} /></div>
+          <div class="form-field"><label for="message">{t.contact.form[4]}</label><textarea id="message" name="message" required placeholder={t.contact.form[5]}></textarea></div>
+          <p class="form-note">{t.contact.form[6]}</p><button class="button button-dark" type="submit">{t.contact.form[7]} <span aria-hidden="true">↗</span></button><p class="form-status" data-form-status role="status" aria-live="polite">{siteConfig.contactEmail ? t.contact.form[8] : t.contact.form[9]}</p>
+        </form></div>
+      </div></section>
+    </>
+  )}
+</SiteLayout>

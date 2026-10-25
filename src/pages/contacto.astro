@@ -1,0 +1,67 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { siteConfig } from "../config";
+---
+
+<SiteLayout
+  title="Contacto"
+  description="Cuéntanos sobre tu proyecto. Contacta a Expecto Codum para sitios web, software a medida, APIs y automatización."
+  currentPage="contacto"
+>
+  <section class="page-hero">
+    <div class="container page-hero-grid">
+      <div>
+        <p class="eyebrow page-kicker"><span class="eyebrow-line"></span> Contacto</p>
+        <h1>Empecemos con<br /><span>una conversación.</span></h1>
+      </div>
+      <div class="page-hero-copy">
+        <p>Comparte tu idea, el reto que quieres resolver o una pregunta. Te responderé para entender qué necesitas y cómo podemos avanzar.</p>
+      </div>
+    </div>
+  </section>
+  <section class="content-section">
+    <div class="container contact-grid">
+      <div class="contact-info">
+        <p class="eyebrow"><span class="eyebrow-line"></span> Cuéntame tu proyecto</p>
+        <h2>¿Qué te gustaría hacer posible?</h2>
+        <p>Cuéntame un poco sobre tu negocio, qué quieres lograr y en qué plazo. No hace falta tener todos los detalles resueltos.</p>
+        <div class="contact-aside">
+          <small>Correo directo</small>
+          <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail} <span aria-hidden="true">↗</span></a>
+          <p class="form-note">El formulario abrirá tu aplicación de correo con el mensaje preparado para enviar.</p>
+        </div>
+        <div class="contact-channels" aria-label="Otros canales de contacto">
+          <a class="channel-link" href={siteConfig.whatsappUrl} target="_blank" rel="noreferrer">WhatsApp · +598 91 355 256 ↗</a>
+          <a class="channel-link" href={siteConfig.telegramUrl} target="_blank" rel="noreferrer">Telegram · @ExpectoC ↗</a>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" data-contact-form data-contact-email={siteConfig.contactEmail}>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="name">Tu nombre</label>
+              <input id="name" name="name" autocomplete="name" required />
+            </div>
+            <div class="form-field">
+              <label for="email">Tu correo</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="service">¿Qué necesitas?</label>
+            <input id="service" name="service" placeholder="Sitio web, automatización, asesoría..." />
+          </div>
+          <div class="form-field">
+            <label for="message">Cuéntame un poco más</label>
+            <textarea id="message" name="message" required placeholder="¿Qué quieres lograr y cómo puedo ayudarte?"></textarea>
+          </div>
+          <p class="form-note">Tus datos solo se usarán para responder a esta solicitud. Al enviar se abrirá tu aplicación de correo, sin backend ni base de datos.</p>
+          <button class="button button-dark" type="submit">Preparar mensaje <span aria-hidden="true">↗</span></button>
+          <p class="form-status" data-form-status role="status" aria-live="polite">
+            {siteConfig.contactEmail ? "El mensaje se preparará en tu aplicación de correo." : "El formulario requiere configurar el correo de destino antes de recibir solicitudes."}
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

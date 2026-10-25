@@ -1,0 +1,465 @@
+---
+import "../styles/global.css";
+import { siteConfig } from "../config";
+import { localized, type Locale } from "../data/locales";
+
+interface Props {
+  title: string;
+  description: string;
+  currentPage: string;
+  locale?: Locale | "es";
+  projectSlug?: string;
+}
+
+const { title, description, currentPage, locale = "es", projectSlug } = Astro.props;
+const copy = locale === "es" ? null : localized[locale];
+const sharedText = {
+  skip: locale === "en" ? "Skip to content" : locale === "ru" ? "Перейти к содержимому" : "Saltar al contenido",
+  homeLabel: locale === "en" ? "Expecto Codum, home" : locale === "ru" ? "Expecto Codum, главная" : "Expecto Codum, inicio",
+  mainNav: locale === "en" ? "Main navigation" : locale === "ru" ? "Главная навигация" : "Navegación principal",
+  menu: locale === "en" ? "Open menu" : locale === "ru" ? "Открыть меню" : "Abrir menú",
+  closeAssistant: locale === "en" ? "Close assistant" : locale === "ru" ? "Закрыть помощника" : "Cerrar asistente",
+  pause: locale === "en" ? "Pause" : locale === "ru" ? "Пауза" : "Pausar",
+  resume: locale === "en" ? "Resume" : locale === "ru" ? "Продолжить" : "Reanudar",
+  reducedMotion: locale === "en" ? "Reduced motion" : locale === "ru" ? "Уменьшение движения" : "Movimiento reducido",
+};
+const localizedPath = (language: Locale | "es") => {
+  if (language === "es") {
+    if (currentPage === "inicio") return "/";
+    if (currentPage === "proyectos" && projectSlug) return `/proyectos/${projectSlug}/`;
+    return `/${({ soluciones: "soluciones", proyectos: "proyectos", acerca: "acerca-de", contacto: "contacto" }[currentPage] ?? "")}/`;
+  }
+  const prefix = `/${language}`;
+  if (currentPage === "inicio") return `${prefix}/`;
+  if (currentPage === "proyectos" && projectSlug) return `${prefix}/projects/${projectSlug}/`;
+  const page = ({ soluciones: "solutions", proyectos: "projects", acerca: "about", contacto: "contact" }[currentPage] ?? "");
+  return `${prefix}/${page}/`;
+};
+const navigationHref = (key: string, fallback: string) => {
+  if (locale === "es") return fallback;
+  if (key === "inicio") return `/${locale}/`;
+  const page = ({ soluciones: "solutions", proyectos: "projects", acerca: "about", contacto: "contact" }[key] ?? "");
+  return `/${locale}/${page}/`;
+};
+const navigation = [
+  { label: "Inicio", href: "/", key: "inicio" },
+  { label: "Soluciones", href: "/soluciones/", key: "soluciones" },
+  { label: "Proyectos", href: "/proyectos/", key: "proyectos" },
+  { label: "Acerca de", href: "/acerca-de/", key: "acerca" },
+  { label: "Contacto", href: "/contacto/", key: "contacto" },
+];
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | {siteConfig.name}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">{sharedText.skip}</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href={locale === "es" ? "/" : `/${locale}/`} aria-label={sharedText.homeLabel}>
+          <img src="/images/expecto-codum-mark.webp" alt="" width="48" height="49" />
+          <span class="brand-copy">
+            <strong>Expecto Codum<span class="brand-period">.</span></strong>
+            <small>{copy ? (locale === "en" ? "Software studio" : "Студия разработки") : "Estudio de software"}</small>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+          <span class="sr-only">{sharedText.menu}</span>
+          <span></span><span></span>
+        </button>
+        <nav class="main-nav" id="main-nav" aria-label={sharedText.mainNav}>
+          {navigation.map((item) => (
+            <a
+              href={navigationHref(item.key, item.href)}
+              class:list={["nav-link", { "is-active": currentPage === item.key }]}
+              aria-current={currentPage === item.key || (currentPage === "proyectos" && projectSlug && item.key === "proyectos") ? "page" : undefined}
+            >
+              {copy ? copy.nav[item.key as keyof typeof copy.nav] : item.label}
+            </a>
+          ))}
+          <div class="language-switcher" aria-label={locale === "ru" ? "Выбрать язык" : locale === "en" ? "Choose language" : "Seleccionar idioma"}>
+            {(["es", "en", "ru"] as const).map((language) => (
+              <a
+                href={localizedPath(language)}
+                lang={language}
+                hreflang={language}
+                aria-current={locale === language ? "page" : undefined}
+                aria-label={language === "es" ? "Español" : language === "en" ? "English" : "Русский"}
+              >{language.toUpperCase()}</a>
+            ))}
+          </div>
+          <a class="nav-cta" href={locale === "es" ? "/contacto/" : `/${locale}/contact/`}>{copy ? copy.nav.cta : "Hablemos"} <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-main">
+        <a class="brand footer-brand" href={locale === "es" ? "/" : `/${locale}/`}>
+          <img src="/images/expecto-codum-mark.webp" alt="" width="48" height="49" />
+          <span class="brand-copy">
+            <strong>Expecto Codum<span class="brand-period">.</span></strong>
+            <small>{copy ? (locale === "en" ? "Software studio" : "Студия разработки") : "Estudio de software"}</small>
+          </span>
+        </a>
+        <p>{copy ? copy.footer.tagline : "Software útil, bien pensado y hecho para crecer."}</p>
+        <a class="footer-contact" href={locale === "es" ? "/contacto/" : `/${locale}/contact/`}>{copy ? copy.footer.contact : "Cuéntame sobre tu proyecto"} <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="footer-links">
+        <div>
+          <span class="footer-group-label">{copy ? copy.footer.explore : "Explorar"}</span>
+          <nav aria-label={copy ? copy.footer.explore : "Enlaces del pie de página"}>
+            {navigation.slice(1).map((item) => (
+              <a href={locale === "es" ? item.href : `/${locale}/${({ soluciones: "solutions", proyectos: "projects", acerca: "about", contacto: "contact" }[item.key] ?? "")}/`}>
+                {copy ? copy.nav[item.key as keyof typeof copy.nav] : item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+        <div>
+          <span class="footer-group-label">{copy ? copy.footer.direct : "Contacto directo"}</span>
+          <nav aria-label={locale === "ru" ? "Контакты" : locale === "en" ? "Contact links" : "Canales de contacto"}>
+            <a href={siteConfig.whatsappUrl} target="_blank" rel="noreferrer">{copy ? copy.footer.whatsapp : "WhatsApp"}</a>
+            <a href={siteConfig.telegramUrl} target="_blank" rel="noreferrer">{copy ? copy.footer.telegram : "Telegram · @ExpectoC"}</a>
+            <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
+          </nav>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-current-year>2026</span> Expecto Codum.</span>
+        <span>{copy ? copy.footer.rights : "Todos los derechos reservados."}</span>
+        <span>{copy ? copy.footer.craft : "Diseñado con intención. Desarrollado con criterio."}</span>
+        <a href="#contenido">{copy ? copy.footer.top : "Volver arriba ↑"}</a>
+      </div>
+    </footer>
+
+    <div class="assistant">
+      <section
+        class="assistant-panel"
+        id="assistant-panel"
+        aria-labelledby="assistant-title"
+        data-reply-web={copy?.assistant.replies[0]}
+        data-reply-automation={copy?.assistant.replies[1]}
+        data-reply-advice={copy?.assistant.replies[2]}
+        hidden
+      >
+        <div class="assistant-head">
+          <span class="assistant-status" aria-hidden="true"></span>
+          <div>
+            <strong id="assistant-title">{copy ? copy.assistant.title : "Asistente ExC"}</strong>
+            <small>{copy ? copy.assistant.subtitle : "Orientación inicial"}</small>
+          </div>
+          <button class="assistant-close" type="button" aria-label={sharedText.closeAssistant}>×</button>
+        </div>
+        <div class="assistant-body" aria-live="polite">
+          <p class="assistant-message">{copy ? copy.assistant.greeting : "¡Hola! ¿Qué te gustaría crear o mejorar?"}</p>
+          <div class="assistant-options">
+            <button type="button" data-reply="web">{copy ? copy.assistant.options[0] : "Un sitio web"}</button>
+            <button type="button" data-reply="automation">{copy ? copy.assistant.options[1] : "Automatizar un proceso"}</button>
+            <button type="button" data-reply="advice">{copy ? copy.assistant.options[2] : "Necesito orientación"}</button>
+          </div>
+          <div class="assistant-response" hidden></div>
+          <a class="assistant-contact" href={locale === "es" ? "/contacto/" : `/${locale}/contact/`}>{copy ? copy.assistant.contact : "Dejar una solicitud"} <span aria-hidden="true">↗</span></a>
+          <p class="assistant-note">{copy ? copy.assistant.note : "Este asistente orienta; no es una persona ni un chat en vivo."}</p>
+        </div>
+      </section>
+      <button class="assistant-trigger" type="button" aria-expanded="false" aria-controls="assistant-panel">
+        <span class="assistant-trigger-icon" aria-hidden="true">✳</span>
+        <span>{copy ? copy.assistant.trigger : "¿Hablamos?"}</span>
+      </button>
+    </div>
+
+    <script>
+      const menuToggle = document.querySelector(".menu-toggle");
+      const mainNav = document.querySelector("#main-nav");
+
+      menuToggle?.addEventListener("click", () => {
+        const expanded = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", String(!expanded));
+        mainNav?.classList.toggle("is-open", !expanded);
+      });
+
+      document.querySelectorAll(".main-nav a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menuToggle?.setAttribute("aria-expanded", "false");
+          mainNav?.classList.remove("is-open");
+        });
+      });
+
+      const assistantTrigger = document.querySelector(".assistant-trigger");
+      const assistantPanel = document.querySelector(".assistant-panel");
+      const closeAssistant = () => {
+        assistantPanel?.setAttribute("hidden", "");
+        assistantTrigger?.setAttribute("aria-expanded", "false");
+      };
+
+      assistantTrigger?.addEventListener("click", () => {
+        const opening = assistantPanel?.hasAttribute("hidden") ?? false;
+        assistantPanel?.toggleAttribute("hidden", !opening);
+        assistantTrigger.setAttribute("aria-expanded", String(opening));
+      });
+      document.querySelector(".assistant-close")?.addEventListener("click", closeAssistant);
+
+      const assistantReplies = {
+        web: assistantPanel?.getAttribute("data-reply-web") || "Puedo ayudarte con un sitio corporativo, una tienda o una plataforma a medida. Cuéntame qué necesitas y qué objetivo quieres lograr.",
+        automation: assistantPanel?.getAttribute("data-reply-automation") || "Podemos revisar tareas repetitivas, integraciones y flujos de trabajo para encontrar una automatización útil y sostenible.",
+        advice: assistantPanel?.getAttribute("data-reply-advice") || "Una primera conversación sirve para aclarar el problema, definir prioridades y recomendar el siguiente paso sin compromiso.",
+      };
+      const assistantResponse = document.querySelector(".assistant-response");
+      document.querySelectorAll("[data-reply]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const key = button.getAttribute("data-reply");
+          if (!assistantResponse || !key || !(key in assistantReplies)) return;
+          assistantResponse.textContent = assistantReplies[key as keyof typeof assistantReplies];
+          assistantResponse.removeAttribute("hidden");
+        });
+      });
+      document.querySelectorAll("[data-current-year]").forEach((element) => {
+        element.textContent = String(new Date().getFullYear());
+      });
+
+      const heroArt = document.querySelector<HTMLElement>(".hero-art");
+      if (heroArt) {
+        const desktopPointer = window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)");
+        const reducedMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let animationFrame: number | undefined;
+
+        const resetHeroParallax = () => {
+          if (animationFrame !== undefined) window.cancelAnimationFrame(animationFrame);
+          animationFrame = undefined;
+          heroArt.style.setProperty("--tilt-x", "0deg");
+          heroArt.style.setProperty("--tilt-y", "0deg");
+          heroArt.style.setProperty("--mark-x", "0px");
+          heroArt.style.setProperty("--mark-y", "0px");
+          heroArt.classList.remove("is-interactive");
+        };
+        const handleHeroPointer = (event: PointerEvent) => {
+          if (!desktopPointer.matches || reducedMotionPreference.matches) {
+            resetHeroParallax();
+            return;
+          }
+          if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+          if (animationFrame !== undefined) window.cancelAnimationFrame(animationFrame);
+
+          animationFrame = window.requestAnimationFrame(() => {
+            const bounds = heroArt.getBoundingClientRect();
+            const horizontal = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1));
+            const vertical = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height) * 2 - 1));
+
+            heroArt.classList.add("is-interactive");
+            heroArt.style.setProperty("--tilt-x", `${horizontal * 0.45}deg`);
+            heroArt.style.setProperty("--tilt-y", `${vertical * -0.45}deg`);
+            heroArt.style.setProperty("--mark-x", `${horizontal * -4}px`);
+            heroArt.style.setProperty("--mark-y", `${vertical * -4}px`);
+            animationFrame = undefined;
+          });
+        };
+        const syncHeroParallax = () => {
+          heroArt.removeEventListener("pointermove", handleHeroPointer);
+          heroArt.removeEventListener("pointerleave", resetHeroParallax);
+          resetHeroParallax();
+
+          if (desktopPointer.matches && !reducedMotionPreference.matches) {
+            heroArt.addEventListener("pointermove", handleHeroPointer, { passive: true });
+            heroArt.addEventListener("pointerleave", resetHeroParallax, { passive: true });
+          }
+        };
+
+        desktopPointer.addEventListener("change", syncHeroParallax);
+        reducedMotionPreference.addEventListener("change", syncHeroParallax);
+        syncHeroParallax();
+      }
+
+      const projectFilters = document.querySelectorAll("[data-filter]");
+      projectFilters.forEach((button) => {
+        button.addEventListener("click", () => {
+          const selected = button.getAttribute("data-filter");
+          projectFilters.forEach((filter) => {
+            filter.setAttribute("aria-pressed", String(filter === button));
+          });
+          document.querySelectorAll("[data-category]").forEach((card) => {
+            const matches = selected === "todos" || card.getAttribute("data-category") === selected;
+            card.toggleAttribute("hidden", !matches);
+          });
+        });
+      });
+
+      const projectCarousel = document.querySelector<HTMLElement>("[data-project-carousel]");
+      const carouselViewport = projectCarousel?.querySelector<HTMLElement>("[data-carousel-viewport]");
+      const carouselPosition = projectCarousel?.querySelector<HTMLElement>("[data-carousel-position]");
+      const carouselToggle = projectCarousel?.querySelector<HTMLButtonElement>("[data-carousel-toggle]");
+      const projectSlides = Array.from(projectCarousel?.querySelectorAll<HTMLElement>(".home-projects .project-card") ?? []);
+
+      if (carouselViewport && carouselPosition && carouselToggle && projectSlides.length > 1) {
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let manuallyPaused = false;
+        let hovered = false;
+        let focused = false;
+        let inView = false;
+        let direction = 1;
+        let autoplayTimer: number | undefined;
+        let positionTimer: number | undefined;
+        let touchTimer: number | undefined;
+
+        projectSlides.forEach((slide, index) => {
+          slide.setAttribute("role", "group");
+          slide.setAttribute("aria-roledescription", "diapositiva");
+          slide.setAttribute("aria-label", `Proyecto ${index + 1} de ${projectSlides.length}: ${slide.getAttribute("aria-label") ?? "destacado"}`);
+        });
+
+        const visibleSlides = () => window.matchMedia("(max-width: 700px)").matches ? 1 : 2;
+        const lastStart = () => Math.max(0, projectSlides.length - visibleSlides());
+        const currentStart = () => {
+          const scrollLeft = carouselViewport.scrollLeft;
+          const firstOffset = projectSlides[0].offsetLeft;
+          return projectSlides.reduce((nearest, slide, index) => {
+            const currentDistance = Math.abs(projectSlides[nearest].offsetLeft - firstOffset - scrollLeft);
+            const nextDistance = Math.abs(slide.offsetLeft - firstOffset - scrollLeft);
+            return nextDistance < currentDistance ? index : nearest;
+          }, 0);
+        };
+        const updatePosition = () => {
+          carouselPosition.textContent = `${String(currentStart() + 1).padStart(2, "0")} / ${String(projectSlides.length).padStart(2, "0")}`;
+        };
+        const goTo = (index: number) => {
+          const target = projectSlides[Math.min(lastStart(), Math.max(0, index))];
+          carouselViewport.scrollTo({
+            left: target.offsetLeft - projectSlides[0].offsetLeft,
+            behavior: reducedMotion.matches ? "auto" : "smooth",
+          });
+          updatePosition();
+        };
+        const syncToggle = () => {
+          carouselToggle.disabled = reducedMotion.matches;
+          carouselToggle.setAttribute("aria-pressed", String(manuallyPaused || reducedMotion.matches));
+          carouselToggle.textContent = reducedMotion.matches
+            ? carouselToggle.getAttribute("data-reduced-label") || "Movimiento reducido"
+            : manuallyPaused
+              ? carouselToggle.getAttribute("data-resume-label") || "Reanudar"
+              : carouselToggle.getAttribute("data-pause-label") || "Pausar";
+        };
+        const syncAutoplay = () => {
+          if (autoplayTimer !== undefined) window.clearInterval(autoplayTimer);
+          autoplayTimer = undefined;
+          if (manuallyPaused || hovered || focused || !inView || reducedMotion.matches || document.hidden) return;
+          autoplayTimer = window.setInterval(() => {
+            const index = currentStart();
+            if (index >= lastStart()) direction = -1;
+            else if (index <= 0) direction = 1;
+            goTo(index + direction);
+          }, 7000);
+        };
+
+        projectCarousel.querySelector("[data-carousel-previous]")?.addEventListener("click", () => {
+          const index = currentStart();
+          goTo(index <= 0 ? lastStart() : index - 1);
+        });
+        projectCarousel.querySelector("[data-carousel-next]")?.addEventListener("click", () => {
+          const index = currentStart();
+          goTo(index >= lastStart() ? 0 : index + 1);
+        });
+        carouselToggle.addEventListener("click", () => {
+          manuallyPaused = !manuallyPaused;
+          syncToggle();
+          syncAutoplay();
+        });
+        carouselViewport.addEventListener("mouseenter", () => {
+          hovered = true;
+          syncAutoplay();
+        });
+        carouselViewport.addEventListener("mouseleave", () => {
+          hovered = false;
+          syncAutoplay();
+        });
+        carouselViewport.addEventListener("touchstart", () => {
+          hovered = true;
+          if (touchTimer !== undefined) window.clearTimeout(touchTimer);
+          syncAutoplay();
+        }, { passive: true });
+        const resumeAfterTouch = () => {
+          if (touchTimer !== undefined) window.clearTimeout(touchTimer);
+          touchTimer = window.setTimeout(() => {
+            hovered = false;
+            syncAutoplay();
+          }, 3500);
+        };
+        carouselViewport.addEventListener("touchend", resumeAfterTouch, { passive: true });
+        carouselViewport.addEventListener("touchcancel", resumeAfterTouch, { passive: true });
+        carouselViewport.addEventListener("focusin", () => {
+          focused = true;
+          syncAutoplay();
+        });
+        carouselViewport.addEventListener("focusout", () => {
+          window.setTimeout(() => {
+            focused = carouselViewport.contains(document.activeElement);
+            syncAutoplay();
+          }, 0);
+        });
+        carouselViewport.addEventListener("scroll", () => {
+          if (positionTimer !== undefined) window.clearTimeout(positionTimer);
+          positionTimer = window.setTimeout(updatePosition, 180);
+        }, { passive: true });
+        document.addEventListener("visibilitychange", syncAutoplay);
+        if ("IntersectionObserver" in window) {
+          const carouselObserver = new IntersectionObserver(([entry]) => {
+            inView = entry.isIntersecting;
+            syncAutoplay();
+          }, { threshold: 0.2 });
+          carouselObserver.observe(projectCarousel);
+        } else {
+          inView = true;
+        }
+        reducedMotion.addEventListener("change", () => {
+          syncToggle();
+          syncAutoplay();
+        });
+        window.addEventListener("resize", () => {
+          goTo(Math.min(currentStart(), lastStart()));
+        });
+        syncToggle();
+        updatePosition();
+        syncAutoplay();
+      }
+
+      const contactForm = document.querySelector("[data-contact-form]");
+      contactForm?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const email = contactForm.getAttribute("data-contact-email");
+        const status = document.querySelector("[data-form-status]");
+        const formData = new FormData(contactForm as HTMLFormElement);
+        const name = String(formData.get("name") ?? "").trim();
+        const sender = String(formData.get("email") ?? "").trim();
+        const service = String(formData.get("service") ?? "").trim();
+        const message = String(formData.get("message") ?? "").trim();
+
+        if (!email) {
+          if (status) status.textContent = contactForm.getAttribute("data-form-missing") || "El formulario está listo, pero falta configurar el correo de destino para recibir solicitudes.";
+          return;
+        }
+
+        const subjectPrefix = contactForm.getAttribute("data-form-subject") || "Nueva consulta de";
+        const unspecified = contactForm.getAttribute("data-form-unspecified") || "No especificado";
+        const subject = encodeURIComponent(`${subjectPrefix} ${name}`);
+        const nameLabel = contactForm.getAttribute("data-form-name-label") || "Nombre";
+        const emailLabel = contactForm.getAttribute("data-form-email-label") || "Correo";
+        const serviceLabel = contactForm.getAttribute("data-form-service-label") || "Servicio";
+        const body = encodeURIComponent(`${nameLabel}: ${name}\n${emailLabel}: ${sender}\n${serviceLabel}: ${service || unspecified}\n\n${message}`);
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        if (status) status.textContent = contactForm.getAttribute("data-form-sent") || "Se abrió tu aplicación de correo con la solicitud preparada.";
+      });
+    </script>
+  </body>
+</html>

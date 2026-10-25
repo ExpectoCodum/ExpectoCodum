@@ -1,0 +1,57 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import ProjectArtwork from "../components/ProjectArtwork.astro";
+import { projects } from "../data/projects";
+---
+
+<SiteLayout
+  title="Proyectos"
+  description="Casos de estudio de productos digitales, sitios web y modernización de sistemas desarrollados por Expecto Codum."
+  currentPage="proyectos"
+>
+  <section class="page-hero projects-hero">
+    <div class="container page-hero-grid">
+      <div>
+        <p class="eyebrow page-kicker"><span class="eyebrow-line"></span> Proyectos seleccionados</p>
+        <h1>Ideas hechas<br /><span>realidad.</span></h1>
+      </div>
+      <div class="page-hero-copy">
+        <p>Productos, plataformas y sistemas mejorados a partir de retos reales. Explora cada caso para conocer su propósito, alcance y tecnologías.</p>
+      </div>
+    </div>
+  </section>
+  <section class="content-section projects-list-section">
+    <div class="container">
+      <div class="project-toolbar">
+        <p>Casos de trabajo y productos digitales</p>
+        <div class="filter-list" role="group" aria-label="Filtrar proyectos">
+          <button class="filter-button" type="button" data-filter="todos" aria-pressed="true">Todos</button>
+          <button class="filter-button" type="button" data-filter="producto" aria-pressed="false">Producto</button>
+          <button class="filter-button" type="button" data-filter="web" aria-pressed="false">Web</button>
+          <button class="filter-button" type="button" data-filter="consultoria" aria-pressed="false">Consultoría</button>
+        </div>
+      </div>
+      <div class="projects-list">
+        {projects.map((project, index) => (
+          <article class="project-row" data-category={project.category}>
+            <a class="project-row-artwork" href={`/proyectos/${project.slug}/`} aria-label={`Ver detalles de ${project.title}`}>
+              <ProjectArtwork project={project} />
+            </a>
+            <div class="project-row-copy">
+              <div class="project-row-meta">
+                <span>{project.categoryLabel}</span>
+                <span>{project.status}</span>
+              </div>
+              <h2>{project.title}</h2>
+              <p class="project-row-headline">{project.headline}</p>
+              <p class="project-row-summary">{project.summary}</p>
+              <p class="project-row-stack">{project.technologiesLabel}</p>
+              <a class="card-link" href={`/proyectos/${project.slug}/`}>Ver caso de estudio <span aria-hidden="true">↗</span></a>
+            </div>
+            <span class="project-row-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</SiteLayout>
