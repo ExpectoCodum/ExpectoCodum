@@ -41,6 +41,11 @@ const navigationHref = (key: string, fallback: string) => {
   const page = ({ soluciones: "solutions", proyectos: "projects", acerca: "about", contacto: "contact" }[key] ?? "");
   return `/${locale}/${page}/`;
 };
+const canonicalUrl = new URL(localizedPath(locale), Astro.site ?? Astro.url);
+const languageAlternates = (["es", "en", "ru"] as const).map((language) => ({
+  language,
+  url: new URL(localizedPath(language), Astro.site ?? Astro.url),
+}));
 const navigation = [
   { label: "Inicio", href: "/", key: "inicio" },
   { label: "Soluciones", href: "/soluciones/", key: "soluciones" },
@@ -58,7 +63,17 @@ const navigation = [
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#ffffff" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {languageAlternates.map(({ language, url }) => <link rel="alternate" hreflang={language} href={url} />)}
+    <link rel="alternate" hreflang="x-default" href={languageAlternates[0].url} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.ico" sizes="32x32" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={`${title} | ${siteConfig.name}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={locale === "es" ? "es_UY" : locale === "en" ? "en_US" : "ru_RU"} />
     <title>{title} | {siteConfig.name}</title>
   </head>
   <body>

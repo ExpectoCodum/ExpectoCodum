@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://expecto-codum.vercel.app/sitemap-index.xml
