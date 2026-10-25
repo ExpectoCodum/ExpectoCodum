@@ -1146,7 +1146,7 @@ h1, h2, h3, p { margin-top: 0; }
 .assistant-note { margin: 12px 0 0; color: #565b60; font-size: .7rem; line-height: 1.5; }
 
 @media (max-width: 900px) {
-  .header-inner,
+  .header-inner { width: calc(100% - 24px); }
   .footer-main,
   .footer-links,
   .footer-bottom { width: calc(100% - 48px); }
@@ -1172,7 +1172,7 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 @media (max-width: 700px) {
-  .header-inner { width: calc(100% - 32px); min-height: 70px; }
+  .header-inner { width: 100%; min-height: 70px; padding-inline: 10px; }
   .brand { min-width: 0; gap: 9px; }
   .brand img { width: 43px; height: 46px; }
   .brand-copy { min-width: 0; }
@@ -1307,6 +1307,7 @@ h1, h2, h3, p { margin-top: 0; }
 
 @media (min-width: 701px) and (max-width: 900px) {
   .header-inner { position: relative; }
+  .header-actions { margin-left: auto; }
   .main-nav {
     position: absolute;
     top: 77px;
@@ -1327,6 +1328,7 @@ h1, h2, h3, p { margin-top: 0; }
   .nav-link.is-active::after { right: auto; bottom: 5px; width: 28px; }
   .nav-cta { justify-content: space-between; margin-top: 9px; }
   .menu-toggle { display: flex; width: 43px; height: 42px; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border: 1px solid rgba(148, 163, 184, .32); background: rgba(255, 255, 255, .04); cursor: pointer; }
+  .site-header .menu-toggle span:not(.sr-only) { width: 17px; height: 2px; background: #f8fafc; }
 }
 
 @media (max-width: 480px) {
