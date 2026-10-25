@@ -87,7 +87,16 @@ const homeDescriptions = [t.home.bot, t.home.breedflow, t.home.miami, t.home.ken
           </div>
           <div class="hero-art">
             <div class="hero-mark">
-              <img src="/images/expecto-codum-mark.webp" alt={locale === "en" ? "Expecto Codum multicolor logo" : "Многоцветный логотип Expecto Codum"} width="830" height="851" fetchpriority="high" />
+              <img
+                src="/images/expecto-codum-mark.webp"
+                data-theme-image
+                data-light-src="/images/expecto-codum-mark.webp"
+                data-dark-src="/images/ExC-logo-black.webp"
+                alt={locale === "en" ? "Expecto Codum multicolor logo" : "Многоцветный логотип Expecto Codum"}
+                width="830"
+                height="851"
+                fetchpriority="high"
+              />
               <span class="hero-spark hero-spark-orange" aria-hidden="true"></span>
               <span class="hero-spark hero-spark-cyan" aria-hidden="true"></span>
               <span class="hero-spark hero-spark-magenta" aria-hidden="true"></span>

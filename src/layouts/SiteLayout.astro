@@ -22,6 +22,8 @@ const sharedText = {
   pause: locale === "en" ? "Pause" : locale === "ru" ? "Пауза" : "Pausar",
   resume: locale === "en" ? "Resume" : locale === "ru" ? "Продолжить" : "Reanudar",
   reducedMotion: locale === "en" ? "Reduced motion" : locale === "ru" ? "Уменьшение движения" : "Movimiento reducido",
+  themeToDark: locale === "en" ? "Switch to dark mode" : locale === "ru" ? "Включить тёмную тему" : "Activar modo oscuro",
+  themeToLight: locale === "en" ? "Switch to light mode" : locale === "ru" ? "Включить светлую тему" : "Activar modo claro",
 };
 const localizedPath = (language: Locale | "es") => {
   if (language === "es") {
@@ -75,22 +77,37 @@ const navigation = [
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:locale" content={locale === "es" ? "es_UY" : locale === "en" ? "en_US" : "ru_RU"} />
     <title>{title} | {siteConfig.name}</title>
+    <script is:inline>
+      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      try {
+        const savedTheme = localStorage.getItem("expecto-codum-theme");
+        document.documentElement.dataset.theme = savedTheme === "dark" || savedTheme === "light"
+          ? savedTheme
+          : systemPrefersDark ? "dark" : "light";
+      } catch {
+        document.documentElement.dataset.theme = systemPrefersDark ? "dark" : "light";
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#contenido">{sharedText.skip}</a>
     <header class="site-header">
       <div class="header-inner">
         <a class="brand" href={locale === "es" ? "/" : `/${locale}/`} aria-label={sharedText.homeLabel}>
-          <img src="/images/expecto-codum-mark.webp" alt="" width="48" height="49" />
+          <img
+            src="/images/expecto-codum-mark.webp"
+            data-theme-image
+            data-light-src="/images/expecto-codum-mark.webp"
+            data-dark-src="/images/ExC-logo-black.webp"
+            alt=""
+            width="48"
+            height="49"
+          />
           <span class="brand-copy">
             <strong>Expecto Codum<span class="brand-period">.</span></strong>
             <small>{copy ? (locale === "en" ? "Software studio" : "Студия разработки") : "Estudio de software"}</small>
           </span>
         </a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
-          <span class="sr-only">{sharedText.menu}</span>
-          <span></span><span></span>
-        </button>
         <nav class="main-nav" id="main-nav" aria-label={sharedText.mainNav}>
           {navigation.map((item) => (
             <a
@@ -114,6 +131,25 @@ const navigation = [
           </div>
           <a class="nav-cta" href={locale === "es" ? "/contacto/" : `/${locale}/contact/`}>{copy ? copy.nav.cta : "Hablemos"} <span aria-hidden="true">↗</span></a>
         </nav>
+        <div class="header-actions">
+          <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+            <span class="sr-only">{sharedText.menu}</span>
+            <span></span><span></span>
+          </button>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            data-dark-label={sharedText.themeToDark}
+            data-light-label={sharedText.themeToLight}
+            aria-pressed="false"
+            aria-label={sharedText.themeToDark}
+            title={sharedText.themeToDark}
+          >
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.6 8.6 0 1 0 20.2 15.3Z" /></svg>
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" /></svg>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -124,7 +160,15 @@ const navigation = [
     <footer class="site-footer">
       <div class="footer-main">
         <a class="brand footer-brand" href={locale === "es" ? "/" : `/${locale}/`}>
-          <img src="/images/expecto-codum-mark.webp" alt="" width="48" height="49" />
+          <img
+            src="/images/expecto-codum-mark.webp"
+            data-theme-image
+            data-light-src="/images/expecto-codum-mark.webp"
+            data-dark-src="/images/ExC-logo-black.webp"
+            alt=""
+            width="48"
+            height="49"
+          />
           <span class="brand-copy">
             <strong>Expecto Codum<span class="brand-period">.</span></strong>
             <small>{copy ? (locale === "en" ? "Software studio" : "Студия разработки") : "Estudio de software"}</small>
@@ -205,6 +249,36 @@ const navigation = [
         const expanded = menuToggle.getAttribute("aria-expanded") === "true";
         menuToggle.setAttribute("aria-expanded", String(!expanded));
         mainNav?.classList.toggle("is-open", !expanded);
+      });
+
+      const themeToggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+      const applyTheme = (theme: "light" | "dark", persist = false) => {
+        document.documentElement.dataset.theme = theme;
+        document.querySelectorAll<HTMLImageElement>("[data-theme-image]").forEach((image) => {
+          const source = image.getAttribute(theme === "dark" ? "data-dark-src" : "data-light-src");
+          if (source && image.getAttribute("src") !== source) image.setAttribute("src", source);
+        });
+        themeToggle?.setAttribute("aria-pressed", String(theme === "dark"));
+        const label = theme === "dark"
+          ? themeToggle?.getAttribute("data-light-label")
+          : themeToggle?.getAttribute("data-dark-label");
+        if (label) {
+          themeToggle?.setAttribute("aria-label", label);
+          themeToggle?.setAttribute("title", label);
+        }
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#11161d" : "#ffffff");
+        if (persist) {
+          try {
+            localStorage.setItem("expecto-codum-theme", theme);
+          } catch {
+            // The selected theme remains active for this page if storage is unavailable.
+          }
+        }
+      };
+      const savedTheme = document.documentElement.dataset.theme;
+      applyTheme(savedTheme === "dark" ? "dark" : "light");
+      themeToggle?.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true);
       });
 
       document.querySelectorAll(".main-nav a").forEach((link) => {
