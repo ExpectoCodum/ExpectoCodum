@@ -1,5 +1,44 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
+
+const experienceGroups = [
+  {
+    period: "2017 — presente",
+    role: "Desarrollador freelance · Full-Stack",
+    summary: "Colaboro con clientes y equipos en el análisis, diseño y desarrollo de productos digitales. Estos proyectos reflejan distintos retos, desde plataformas SaaS hasta aplicaciones móviles y experiencias web.",
+    projects: [
+      { title: "BreedFlow · Plataforma SaaS B2B", details: "Diseño y desarrollo de una plataforma multi-inquilino que conecta federaciones, clubes, criadores y propietarios. Incluye pedigríes recursivos, cálculo asíncrono del coeficiente de consanguinidad mediante la fórmula de Wright hasta ocho generaciones y simulación virtual de cruces. Angular y TypeScript, Django Ninja, PostgreSQL y Podman; arquitectura de monolito modular." },
+      { title: "Kennel Tach Dream · Presencia digital", details: "Desarrollé el sitio de un criadero familiar de English Cocker Spaniel con Angular y Django, integrando su identidad, contenidos informativos, blog e información sobre la raza y sus genealogías." },
+      { title: "Aplicación de delivery · Node.js y React Native", details: "Desarrollé una solución de entregas de extremo a extremo con backend en Node.js y aplicación móvil en React Native, seguimiento geolocalizado en tiempo real y cálculo dinámico de rutas." },
+    ],
+  },
+  {
+    period: "2019 — 2022",
+    role: "PM Senior, Arquitecto de Software y Líder de Equipo · Citmatel",
+    summary: "Lideré un equipo de cinco desarrolladores bajo Scrum/RUP, coordinando requisitos, planificación, revisiones de código y documentación técnica. La auditoría nacional Calisoft revisó frontend, backend, base de datos y documentación; el proyecto obtuvo certificación de calidad con cero errores.",
+    projects: [
+      { title: "Rodas XXI · Modernización de ERP", details: "Dirigí durante dos años la modernización de un sistema con más de 20 años en producción. Coordiné la descomposición funcional del módulo de facturación en tres servicios lógicos y la migración de SQL Server 2000 a PostgreSQL 12 preservando la integridad transaccional. El trabajo incluyó diagramas ER, casos de uso y procesos BPMN con Visual Paradigm." },
+    ],
+  },
+  {
+    period: "Consultoría",
+    role: "Analista de sistemas · Servigen",
+    summary: "Analicé necesidades operativas y participé en la planificación de sistemas de gestión financiera, traduciendo los requerimientos del negocio en soluciones claras y viables.",
+    projects: [],
+  },
+  {
+    period: "Producto propio",
+    role: "Creador · EspañolDiarioBot",
+    summary: "Diseñé y publiqué @SpanishDailyBot como software open source de Expecto Lingua. El bot de Telegram ofrece ejercicios de gramática y vocabulario, correcciones explicadas, estadísticas, niveles, retos diarios, referidos y opciones premium, con una arquitectura asíncrona en Python y aiogram 3.",
+    projects: [],
+  },
+  {
+    period: "Proyecto académico",
+    role: "Planificación de horarios universitarios",
+    summary: "Desarrollé con Ruby on Rails un sistema para gestionar locales y optimizar horarios mediante algoritmos genéticos. El proyecto redujo los conflictos organizativos en un 40 % y fue el tema de mi tesis de grado en la UCI.",
+    projects: [],
+  },
+];
 ---
 
 <SiteLayout
@@ -38,42 +77,19 @@ import SiteLayout from "../layouts/SiteLayout.astro";
     <div class="container">
       <p class="eyebrow"><span class="eyebrow-line"></span> Experiencia profesional</p>
       <div class="timeline">
-        <article class="timeline-item">
-          <span class="timeline-date">Producto SaaS</span>
-          <div><h3>Fundador y Lead Engineer · BreedFlow</h3><p>Diseño y desarrollo de una plataforma SaaS B2B que conecta federaciones, clubes, criadores y propietarios con aislamiento de datos por organización. Modelé un dominio cinológico complejo con pedigríes recursivos, cálculo asíncrono del coeficiente de consanguinidad mediante la fórmula de Wright hasta ocho generaciones y simulación virtual de cruces. La solución usa Angular y TypeScript, Django Ninja, PostgreSQL y Podman dentro de una arquitectura de monolito modular.</p></div>
-        </article>
-        <article class="timeline-item">
-          <span class="timeline-date">Desarrollo web</span>
-          <div><h3>Mejora web · Miami Torrejas</h3><p>Reorganicé un sitio complejo en una experiencia one-page enfocada en facilitar la decisión del cliente. La interfaz Angular calcula cantidades y costos en tiempo real según las necesidades del evento y prepara una cotización detallada para compartir directamente por WhatsApp empresarial.</p></div>
-        </article>
-        <article class="timeline-item">
-          <span class="timeline-date">Desarrollo web</span>
-          <div><h3>Sitio web · Kennel Tach Dream</h3><p>Desarrollé la presencia digital de un criadero familiar de English Cocker Spaniel, combinando Angular y Django. El sitio organiza su identidad, contenidos informativos, blog y material sobre la raza y sus genealogías para acercar el criadero a familias y personas interesadas.</p></div>
-        </article>
-        <article class="timeline-item">
-          <span class="timeline-date">En producción</span>
-          <div><h3>Creador · EspañolDiarioBot</h3><p>Diseñé y publiqué como software open source @SpanishDailyBot, un producto de Expecto Lingua para practicar español desde Telegram. Ofrece ejercicios de gramática y vocabulario, correcciones explicadas, estadísticas, niveles, retos diarios, referidos y opciones premium. Su arquitectura asíncrona con Python y aiogram 3 organiza las conversaciones mediante estados y componentes reutilizables.</p></div>
-        </article>
-        <article class="timeline-item">
-          <span class="timeline-date">Aplicación móvil</span>
-          <div><h3>Sistema de delivery · Node.js y React Native</h3><p>Desarrollé de extremo a extremo una solución de entregas con backend en Node.js y aplicación móvil en React Native. Integré seguimiento geolocalizado en tiempo real y cálculo dinámico de rutas para coordinar la experiencia de entrega.</p></div>
-        </article>
-        <article class="timeline-item">
-          <span class="timeline-date">Optimización · Ruby on Rails</span>
-          <div><h3>Planificación de horarios universitarios</h3><p>Creé un sistema para gestionar locales y optimizar horarios universitarios, usando algoritmos genéticos para buscar asignaciones más eficientes. El proyecto redujo en un 40 % los conflictos organizativos; su enfoque también fue el tema de mi tesis de grado.</p></div>
-        </article>
-        <article class="timeline-item">
-          <span class="timeline-date">2017 — presente</span>
-          <div><h3>Fundador · Desarrollador Full-Stack</h3><p>Desde 2017 acompaño proyectos de consultoría y desarrollo freelance en todo el ciclo de vida: análisis y extracción de requisitos, arquitectura, APIs, desarrollo full-stack, revisiones de código, documentación y preparación para producción. He trabajado con plataformas SaaS, sistemas de gestión, automatización y productos con reglas de negocio y datos complejos.</p></div>
-        </article>
-        <article class="timeline-item">
-          <span class="timeline-date">2019 — 2022</span>
-          <div><h3>PM Senior, Arquitecto de Software y Líder de Equipo · Citmatel</h3><p>Dirigí durante dos años la modernización del ERP Rodas XXI, un sistema con más de 20 años en producción. Lideré la extracción de requisitos con stakeholders y usuarios, la descomposición funcional del módulo de facturación en tres servicios lógicos y la migración de SQL Server 2000 a PostgreSQL 12 preservando la integridad transaccional. Coordiné un equipo de cinco desarrolladores bajo Scrum/RUP, gestioné planificación y code reviews y actualicé la documentación técnica. El trabajo incluyó diagramas ER, casos de uso y procesos BPMN con Visual Paradigm. La auditoría nacional Calisoft revisó frontend, backend, base de datos y documentación: el proyecto obtuvo certificación de calidad con cero errores.</p></div>
-        </article>
-        <article class="timeline-item">
-          <span class="timeline-date">Consultoría</span>
-          <div><h3>Asesor técnico · Servigen</h3><p>Análisis de necesidades y planificación de sistemas de gestión financiera, con foco en la eficiencia operativa y la claridad técnica.</p></div>
-        </article>
+        {experienceGroups.map((group) => (
+          <article class="experience-group">
+            <div class="experience-heading">
+              <span class="timeline-date">{group.period}</span>
+              <div><h3>{group.role}</h3><p>{group.summary}</p></div>
+            </div>
+            {group.projects.length > 0 && (
+              <div class="experience-projects">
+                {group.projects.map((project) => <article class="experience-project"><h4>{project.title}</h4><p>{project.details}</p></article>)}
+              </div>
+            )}
+          </article>
+        ))}
       </div>
     </div>
   </section>
