@@ -1040,15 +1040,20 @@ h1, h2, h3, p { margin-top: 0; }
 .about-copy h2 { margin-bottom: 20px; font-size: clamp(2.3rem, 4vw, 4rem); letter-spacing: -.08em; line-height: 1.03; }
 .about-copy p { color: #555b61; font-size: 1rem; line-height: 1.8; }
 .about-copy strong { color: var(--ink); }
-.skill-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 48px; }
+.skill-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 30px; margin-top: 48px; }
 .skill-column { border-top: 2px solid var(--orange); padding-top: 19px; }
 .skill-column h3 { margin-bottom: 13px; font-size: 1rem; }
 .skill-column p { margin-bottom: 0; color: #555b61; font-size: .88rem; line-height: 1.8; }
 .timeline { display: grid; border-top: 1px solid var(--line); }
-.timeline-item { display: grid; grid-template-columns: 170px 1fr; gap: 35px; border-bottom: 1px solid var(--line); padding: 24px 0; }
+.experience-group { display: grid; grid-template-columns: 170px 1fr; gap: 35px; border-bottom: 1px solid var(--line); padding: 30px 0; }
+.experience-heading { display: contents; }
 .timeline-date { color: var(--orange-dark); font-size: .82rem; font-weight: 700; }
-.timeline-item h3 { margin-bottom: 8px; font-size: 1.15rem; }
-.timeline-item p { max-width: 780px; margin-bottom: 0; color: #555b61; font-size: .91rem; line-height: 1.75; }
+.experience-group h3 { margin-bottom: 8px; font-size: 1.15rem; }
+.experience-group p { max-width: 780px; margin-bottom: 0; color: #555b61; font-size: .91rem; line-height: 1.75; }
+.experience-projects { grid-column: 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px; margin-top: 4px; }
+.experience-project { border-left: 2px solid var(--orange); padding: 5px 0 5px 16px; }
+.experience-project h4 { margin: 0 0 6px; font-size: .94rem; }
+.experience-project p { font-size: .84rem; line-height: 1.65; }
 .client-list { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; margin-top: 34px; }
 .client-name { font-family: "Manrope", sans-serif; font-size: clamp(1.05rem, 2.2vw, 1.55rem); font-weight: 800; letter-spacing: -.05em; }
 .client-name:nth-child(2) { font-family: Georgia, serif; }
@@ -1271,7 +1276,9 @@ h1, h2, h3, p { margin-top: 0; }
   .contact-grid { grid-template-columns: 1fr; gap: 32px; }
   .portrait-placeholder { min-height: 340px; }
   .skill-columns { grid-template-columns: 1fr; gap: 23px; }
-  .timeline-item { grid-template-columns: 1fr; gap: 9px; padding-block: 20px; }
+  .experience-group { grid-template-columns: 1fr; gap: 9px; padding-block: 24px; }
+  .experience-heading { display: grid; gap: 8px; }
+  .experience-projects { grid-column: 1; margin-top: 8px; }
   .client-list { justify-content: flex-start; gap: 20px 28px; }
   .form-row { grid-template-columns: 1fr; }
   .contact-form { padding: 23px 18px; }
@@ -1403,7 +1410,7 @@ h1, h2, h3, p { margin-top: 0; }
 :root[data-theme="dark"] .project-capability-list li,
 :root[data-theme="dark"] .about-copy p,
 :root[data-theme="dark"] .skill-column p,
-:root[data-theme="dark"] .timeline-item p,
+:root[data-theme="dark"] .experience-group p,
 :root[data-theme="dark"] .contact-info > p,
 :root[data-theme="dark"] .form-note,
 :root[data-theme="dark"] .form-status { color: #b8c0ca; }
