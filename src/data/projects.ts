@@ -125,8 +125,8 @@ export const projects: Project[] = [
     visualKicker: "EL SABOR DE LA ABUELA",
     visualTitle: "MIAMI TORREJAS",
     images: [],
-    externalUrl: "https://miamitorrejas.com",
-    externalLabel: "Visitar miamitorrejas.com",
+    externalUrl: "https://miami-torrejas.vercel.app/",
+    externalLabel: "Visitar sitio web",
   },
   {
     slug: "tach-dream",
